@@ -17,7 +17,7 @@ This program reads Kubernetes YAML manifests and generates a visual diagram of t
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/yourusername/k8s-mermaid.git
+    git clone https://github.com/kocierik/k8s-mermaid.git
     cd k8s-mermaid
     ```
 
