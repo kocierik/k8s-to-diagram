@@ -1,6 +1,6 @@
 # K8s Diagram architecture generator
 
-A tool for visualizing Kubernetes infrastructure using [Mermaid](https://github.com/dreampuf/mermaid.go). .
+A tool for visualizing Kubernetes infrastructure using [Mermaid](https://github.com/dreampuf/mermaid.go).
 
 ## Overview
 
@@ -57,4 +57,4 @@ Feel free to contribute by submitting issues or pull requests. Please adhere to 
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/kocierik/k8s-to-diagram/blob/main/LICENSE) file for details.
