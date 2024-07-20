@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  annotations:
+    communication: |
+      {
+        "name": "backend",
+        "inbound": [
+          {
+            "service": "frontend",
+            "port": 80
+          },
+          {
+            "service": "database",
+            "port": 5432
+          }
+        ],
+        "outbound": [
+          {
+            "service": "database",
+            "port": 5432
+          }
+        ]
+      }
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: backend:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DB_HOST
+          value: database-service
