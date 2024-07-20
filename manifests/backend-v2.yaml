@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-v2
+  annotations:
+    communication: |
+      {
+        "name": "backend-v2",
+        "inbound": [{"service": "database", "port": 5432}],
+        "outbound": [{"service": "frontend-v2", "port": 80}]
+      }
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend-v2
+  template:
+    metadata:
+      labels:
+        app: backend-v2
+    spec:
+      containers:
+      - name: backend
+        image: backend:v2
+        ports:
+        - containerPort: 8080
+

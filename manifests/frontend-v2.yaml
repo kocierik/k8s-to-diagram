@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-v2
+  annotations:
+    communication: |
+      {
+        "name": "frontend-v2",
+        "inbound": [{"service": "backend", "port": 8080}],
+        "outbound": [{"service": "backend", "port": 8080}]
+      }
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-v2
+  template:
+    metadata:
+      labels:
+        app: frontend-v2
+    spec:
+      containers:
+      - name: frontend
+        image: frontend:v2
+        ports:
+        - containerPort: 80
+
