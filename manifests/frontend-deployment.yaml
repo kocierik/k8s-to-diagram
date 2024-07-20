@@ -6,12 +6,7 @@ metadata:
     communication: |
       {
         "name": "frontend",
-        "inbound": [
-          {
-            "service": "backend",
-            "port": 8080
-          }
-        ],
+        "inbound": [],
         "outbound": [
           {
             "service": "backend",

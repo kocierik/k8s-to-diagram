@@ -6,12 +6,7 @@ metadata:
     communication: |
       {
         "name": "database",
-        "inbound": [
-          {
-            "service": "backend",
-            "port": 5432
-          }
-        ],
+        "inbound": [],
         "outbound": []
       }
 spec:

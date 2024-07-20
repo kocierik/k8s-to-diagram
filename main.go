@@ -97,12 +97,44 @@ func generateMermaidGraph(manifests []K8sResource) string {
 				fmt.Printf("Error unmarshalling communication annotation for %s: %v\n", resource.Metadata.Name, err)
 				continue
 			}
+			if comm.Name != "" {
+				id := comm.Name
+				resourceMap[id] = resource
+				graph += fmt.Sprintf("    %s[%s: %s];\n", id, resource.Kind, resource.Metadata.Name)
+			}
 		}
+	}
 
-		if comm.Name != "" {
-			id := fmt.Sprintf("%s_%s", resource.Kind, comm.Name)
-			resourceMap[id] = resource
-			graph += fmt.Sprintf("    %s[%s:%s];\n", id, resource.Kind, resource.Metadata.Name)
+	// Second pass: create connections
+	for _, resource := range manifests {
+		var comm Communication
+		if commAnnotation, ok := resource.Metadata.Annotations["communication"]; ok {
+			err := json.Unmarshal([]byte(commAnnotation), &comm)
+			if err != nil {
+				fmt.Printf("Error unmarshalling communication annotation for %s: %v\n", resource.Metadata.Name, err)
+				continue
+			}
+			sourceID := comm.Name
+
+			// Handle outbound communications
+			for _, outbound := range comm.Outbound {
+				targetID := outbound.Service
+				if _, exists := resourceMap[targetID]; exists {
+					graph += fmt.Sprintf("    %s --> |port %d| %s;\n", sourceID, outbound.Port, targetID)
+				} else {
+					fmt.Printf("Warning: Outbound service %s not found for %s\n", outbound.Service, sourceID)
+				}
+			}
+
+			// Handle inbound communications
+			for _, inbound := range comm.Inbound {
+				sourceServiceID := inbound.Service
+				if _, exists := resourceMap[sourceServiceID]; exists {
+					graph += fmt.Sprintf("    %s --> |port %d| %s;\n", sourceServiceID, inbound.Port, sourceID)
+				} else {
+					fmt.Printf("Warning: Inbound service %s not found for %s\n", inbound.Service, sourceID)
+				}
+			}
 		}
 	}
 
@@ -120,4 +152,3 @@ func main() {
 	graph := generateMermaidGraph(manifests)
 	renderMermaidGraph(graph)
 }
-
