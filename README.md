@@ -1,6 +1,11 @@
 # K8s Diagram architecture generator
 
-A tool for visualizing Kubernetes infrastructure using [Mermaid](https://github.com/dreampuf/mermaid.go).
+A tool for visualizing Kubernetes infrastructure manifest using [Mermaid](https://github.com/dreampuf/mermaid.go).
+<div align="center">
+    
+![diagram generated](https://raw.githubusercontent.com/kocierik/k8s-to-diagram/main/images/k8s_infrastructure.png?token=GHSAT0AAAAAACSO5SDVETGPH3KZGPAYPZ4GZU457AA)
+
+</div>
 
 ## Overview
 
@@ -36,12 +41,12 @@ metadata:
   annotations:
     communication: |
       {
-        "name": "service-name",
+        "name": "service-name-0",
         "inbound": [
-          {"service": "service-name", "port": 1234}
+          {"service": "service-name-1", "port": 1234}
         ],
         "outbound": [
-          {"service": "service-name", "port": 1234}
+          {"service": "service-name-2", "port": 1234}
         ]
       }
 ```
