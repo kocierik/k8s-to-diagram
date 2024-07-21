@@ -22,7 +22,7 @@ func RenderMermaidGraph(graph string) {
 		fmt.Printf("Error rendering SVG: %v\n", err)
 		return
 	}
-	err = os.WriteFile("k8s_infrastructure.svg", []byte(svgContent), 0644)
+	err = os.WriteFile("images/k8s_infrastructure.svg", []byte(svgContent), 0644)
 	if err != nil {
 		fmt.Printf("Error writing SVG file: %v\n", err)
 	}
@@ -32,7 +32,7 @@ func RenderMermaidGraph(graph string) {
 		fmt.Printf("Error rendering PNG: %v\n", err)
 		return
 	}
-	err = os.WriteFile("k8s_infrastructure.png", pngContent, 0644)
+	err = os.WriteFile("images/k8s_infrastructure.png", pngContent, 0644)
 	if err != nil {
 		fmt.Printf("Error writing PNG file: %v\n", err)
 	}

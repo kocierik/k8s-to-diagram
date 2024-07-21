@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification
+  annotations:
+    communication: |
+      {
+        "name": "notification",
+        "inbound": [],
+        "outbound": [
+          {"service": "database", "port": 5432}
+        ]
+      }
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification
+  template:
+    metadata:
+      labels:
+        app: notification
+    spec:
+      containers:
+      - name: notification
+        image: notification:latest
+        ports:
+        - containerPort: 8080
+

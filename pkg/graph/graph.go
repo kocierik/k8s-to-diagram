@@ -24,7 +24,7 @@ func GenerateMermaidGraph(manifests []types.K8sResource) string {
 				// Use comm.Name as the key in resourceMap
 				id := comm.Name
 				resourceMap[id] = resource
-				graph += fmt.Sprintf("    %s[%s: %s];\n", id, resource.Kind, resource.Metadata.Name)
+				graph += fmt.Sprintf("    %s[%s];\n", id, resource.Metadata.Name)
 			}
 		}
 	}

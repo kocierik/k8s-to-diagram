@@ -1,35 +1,35 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: database-v2
+  name: database
   annotations:
     communication: |
       {
-        "name": "database-v2",
+        "name": "database",
         "inbound": [],
         "outbound": []
       }
 spec:
-  serviceName: "database-v2"
+  serviceName: "database"
   replicas: 1
   selector:
     matchLabels:
-      app: database-v2
+      app: database
   template:
     metadata:
       labels:
-        app: database-v2
+        app: database
     spec:
       containers:
       - name: database
-        image: postgres:v2
+        image: postgres:latest
         ports:
         - containerPort: 5432
         env:
         - name: POSTGRES_DB
-          value: mydatabase
+          value: ticketing
         - name: POSTGRES_USER
-          value: user
+          value: ticket_user
         - name: POSTGRES_PASSWORD
-          value: password
+          value: securepassword
 

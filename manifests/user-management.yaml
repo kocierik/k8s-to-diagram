@@ -1,34 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
+  name: user-management
   annotations:
     communication: |
       {
-        "name": "backend",
+        "name": "user-management",
         "inbound": [],
         "outbound": [
-          {
-            "service": "database",
-            "port": 5432
-          }
+          {"service": "database", "port": 5432}
         ]
       }
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: backend
+      app: user-management
   template:
     metadata:
       labels:
-        app: backend
+        app: user-management
     spec:
       containers:
-      - name: backend
-        image: backend:latest
+      - name: user-management
+        image: user-management:latest
         ports:
         - containerPort: 8080
-        env:
-        - name: DB_HOST
-          value: database-service
+

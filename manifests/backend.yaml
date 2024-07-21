@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  annotations:
+    communication: |
+      {
+        "name": "backend",
+        "inbound": [],
+        "outbound": [
+          {"service": "user-management", "port": 8083},
+          {"service": "payment", "port": 8082},
+          {"service": "notification", "port": 8081}
+        ]
+      }
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: backend:latest
+        ports:
+        - containerPort: 8080
+

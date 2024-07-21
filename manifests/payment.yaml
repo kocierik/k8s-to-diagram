@@ -1,31 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: payment
   annotations:
     communication: |
       {
-        "name": "frontend",
+        "name": "payment",
         "inbound": [],
         "outbound": [
-          {
-            "service": "backend",
-            "port": 8080
-          }
+          {"service": "database", "port": 5432}
         ]
       }
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
-      app: frontend
+      app: payment
   template:
     metadata:
       labels:
-        app: frontend
+        app: payment
     spec:
       containers:
-      - name: frontend
-        image: frontend:latest
+      - name: payment
+        image: payment:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8080
+
