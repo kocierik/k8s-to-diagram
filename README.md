@@ -1,9 +1,9 @@
 # K8s Diagram architecture generator
 
-A tool for visualizing Kubernetes infrastructure manifest using [Mermaid](https://github.com/dreampuf/mermaid.go).
+A tool for visualizing Kubernetes infrastructure manifest using [d2](https://github.com/terrastruct/d2).
 <div align="center">
     
-![diagram generated](https://raw.githubusercontent.com/kocierik/k8s-to-diagram/main/images/k8s_infrastructure.png?token=GHSAT0AAAAAACSO5SDVETGPH3KZGPAYPZ4GZU457AA)
+![diagram generated](https://raw.githubusercontent.com/kocierik/k8s-to-diagram/main/images/k8s_infrastructure.svg)
 
 </div>
 
