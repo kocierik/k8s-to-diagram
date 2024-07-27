@@ -13,37 +13,65 @@ func sanitizeName(name string) string {
 	return reg.ReplaceAllString(name, "_")
 }
 
-func GenerateD2Graph(manifests []types.K8sResource) string {
-	graph := "graph {\n"
+func getShapeForKind(kind string) string {
+	switch kind {
+	case "Deployment":
+		return "rectangle"
+	case "Service":
+		return "square"
+	case "Pod":
+		return "parallelogram"
+	case "ConfigMap":
+		return "diamond"
+	case "Secret":
+		return "hexagon"
+	case "Ingress":
+		return "stored_data"
+	case "StatefulSet":
+		return "cylinder"
+	case "PersistentVolume":
+		return "cloud"
+	case "PersistentVolumeClaim":
+		return "cylinder"
+	default:
+		return "rectangle" // Default shape
+	}
+}
 
+func GenerateD2Graph(manifests []types.K8sResource) string {
+	graph := "Diagram Architecture {\n"
 	resourceMap := make(map[string]types.K8sResource)
 
 	// First pass: create nodes and clusters
 	for _, resource := range manifests {
 		var comm types.Communication
-
 		if commAnnotation, ok := resource.Metadata.Annotations["communication"]; ok {
 			err := json.Unmarshal([]byte(commAnnotation), &comm)
 			if err != nil {
 				fmt.Printf("Error unmarshalling communication annotation for %s: %v\n", resource.Metadata.Name, err)
 				continue
 			}
-
 			if comm.Name != "" {
 				id := sanitizeName(comm.Name)
 				resourceMap[id] = resource
 				replicas := resource.Spec.Replicas
 				if replicas == 0 {
-					replicas = 1 // Assumption: if replicas is not specified, consider it as 1
+					replicas = 1
 				}
+				graph += fmt.Sprintf(" %s {\n", id)
+				graph += fmt.Sprintf(" label: \"%s\"\n", resource.Metadata.Name)
 
-				graph += fmt.Sprintf("  %s {\n", id)
-				graph += fmt.Sprintf("    label: \"%s\"\n", resource.Metadata.Name)
+				// Get shape based on Kind
+				shape := getShapeForKind(resource.Kind)
+
 				for i := 0; i < replicas; i++ {
 					replicaID := sanitizeName(fmt.Sprintf("%s_%d", comm.Name, i))
-					graph += fmt.Sprintf("    %s: \"%s[%d]\"\n", replicaID, resource.Metadata.Name, i+1)
+					graph += fmt.Sprintf(" %s: {\n", replicaID)
+					graph += fmt.Sprintf("  label: \"%s[%d]\"\n", resource.Metadata.Name, i+1)
+					graph += fmt.Sprintf("  shape: %s\n", shape)
+					graph += " }\n"
 				}
-				graph += "  }\n"
+				graph += " }\n"
 			}
 		}
 	}
