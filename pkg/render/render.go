@@ -51,7 +51,7 @@ func RenderD2Graph(graph1 string) error {
 		return fmt.Errorf("failed to render SVG: %w", err)
 	}
 
-	if err := os.WriteFile(filepath.Join("out.svg"), out, 0600); err != nil {
+	if err := os.WriteFile(filepath.Join("images/k8s_infrastructure.svg"), out, 0600); err != nil {
 		return fmt.Errorf("failed to write SVG file: %w", err)
 	}
 
