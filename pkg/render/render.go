@@ -4,38 +4,56 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path/filepath"
+	"strings"
 
-	"github.com/dreampuf/mermaid.go"
+	"oss.terrastruct.com/d2/d2compiler"
+	"oss.terrastruct.com/d2/d2exporter"
+	"oss.terrastruct.com/d2/d2layouts/d2dagrelayout"
+	"oss.terrastruct.com/d2/d2renderers/d2svg"
+	"oss.terrastruct.com/d2/d2themes/d2themescatalog"
+	"oss.terrastruct.com/d2/lib/textmeasure"
 )
 
-func RenderMermaidGraph(graph string) {
-	ctx := context.Background()
-	re, err := mermaid_go.NewRenderEngine(ctx)
-	if err != nil {
-		fmt.Printf("Error creating render engine: %v\n", err)
-		return
-	}
-	defer re.Cancel()
+func RenderD2Graph(graph1 string) error {
+	fmt.Println("grafico --> ", graph1)
 
-	svgContent, err := re.Render(graph)
+	graph, config, err := d2compiler.Compile("", strings.NewReader(graph1), nil)
 	if err != nil {
-		fmt.Printf("Error rendering SVG: %v\n", err)
-		return
-	}
-	err = os.WriteFile("images/k8s_infrastructure.svg", []byte(svgContent), 0644)
-	if err != nil {
-		fmt.Printf("Error writing SVG file: %v\n", err)
+		return fmt.Errorf("failed to compile graph: %w", err)
 	}
 
-	pngContent, _, err := re.RenderAsPng(graph)
+	graph.ApplyTheme(d2themescatalog.NeutralDefault.ID)
+
+	ruler, err := textmeasure.NewRuler()
 	if err != nil {
-		fmt.Printf("Error rendering PNG: %v\n", err)
-		return
-	}
-	err = os.WriteFile("images/k8s_infrastructure.png", pngContent, 0644)
-	if err != nil {
-		fmt.Printf("Error writing PNG file: %v\n", err)
+		return fmt.Errorf("failed to create text ruler: %w", err)
 	}
 
-	fmt.Println("Infrastructure schema generated successfully.")
+	if err := graph.SetDimensions(nil, ruler, nil); err != nil {
+		return fmt.Errorf("failed to set graph dimensions: %w", err)
+	}
+
+	if err := d2dagrelayout.Layout(context.Background(), graph, nil); err != nil {
+		return fmt.Errorf("failed to layout graph: %w", err)
+	}
+
+	diagram, err := d2exporter.Export(context.Background(), graph, nil)
+	if err != nil {
+		return fmt.Errorf("failed to export diagram: %w", err)
+	}
+	diagram.Config = config
+
+	out, err := d2svg.Render(diagram, &d2svg.RenderOpts{
+		ThemeID: &d2themescatalog.NeutralDefault.ID,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to render SVG: %w", err)
+	}
+
+	if err := os.WriteFile(filepath.Join("out.svg"), out, 0600); err != nil {
+		return fmt.Errorf("failed to write SVG file: %w", err)
+	}
+
+	return nil
 }

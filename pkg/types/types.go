@@ -7,6 +7,9 @@ type K8sResource struct {
 		Name        string            `yaml:"name"`
 		Annotations map[string]string `yaml:"annotations"`
 	} `yaml:"metadata"`
+	Spec struct {
+		Replicas int `yaml:"replicas"`
+	}
 }
 
 type Communication struct {

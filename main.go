@@ -16,7 +16,6 @@ func main() {
 		return
 	}
 
-	graphData := graph.GenerateMermaidGraph(manifests)
-	render.RenderMermaidGraph(graphData)
+	graphData := graph.GenerateD2Graph(manifests)
+	render.RenderD2Graph(graphData)
 }
-
