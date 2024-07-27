@@ -18,7 +18,7 @@ func GenerateD2Graph(manifests []types.K8sResource) string {
 
 	resourceMap := make(map[string]types.K8sResource)
 
-	// First pass: create nodes
+	// First pass: create nodes and clusters
 	for _, resource := range manifests {
 		var comm types.Communication
 
@@ -32,7 +32,18 @@ func GenerateD2Graph(manifests []types.K8sResource) string {
 			if comm.Name != "" {
 				id := sanitizeName(comm.Name)
 				resourceMap[id] = resource
-				graph += fmt.Sprintf("  %s: \"%s\"\n", id, resource.Metadata.Name)
+				replicas := resource.Spec.Replicas
+				if replicas == 0 {
+					replicas = 1 // Assumption: if replicas is not specified, consider it as 1
+				}
+
+				graph += fmt.Sprintf("  %s {\n", id)
+				graph += fmt.Sprintf("    label: \"%s\"\n", resource.Metadata.Name)
+				for i := 0; i < replicas; i++ {
+					replicaID := sanitizeName(fmt.Sprintf("%s_%d", comm.Name, i))
+					graph += fmt.Sprintf("    %s: \"%s[%d]\"\n", replicaID, resource.Metadata.Name, i+1)
+				}
+				graph += "  }\n"
 			}
 		}
 	}
