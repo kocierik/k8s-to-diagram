@@ -21,15 +21,10 @@ spec:
         app: database
     spec:
       containers:
-      - name: database
-        image: postgres:latest
-        ports:
-        - containerPort: 5432
-        env:
-        - name: POSTGRES_DB
-          value: ticketing
-        - name: POSTGRES_USER
-          value: ticket_user
-        - name: POSTGRES_PASSWORD
-          value: securepassword
-
+        - name: database
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: database-secrets
