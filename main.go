@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/joho/godotenv"
-	"github.com/kocierik/k8s-to-diagram/pkg/ai"
 	"github.com/kocierik/k8s-to-diagram/pkg/graph"
 	"github.com/kocierik/k8s-to-diagram/pkg/manifests"
 	"github.com/kocierik/k8s-to-diagram/pkg/render"
@@ -37,6 +36,6 @@ func main() {
 		return
 	}
 	imagePath = "images/k8s_infrastructure.png"
-	ai.AnalyzeWithGemini(imagePath)
+	// ai.AnalyzeWithGemini(imagePath)
 	fmt.Println("\n\n Diagram generated and analyzed successfully.")
 }

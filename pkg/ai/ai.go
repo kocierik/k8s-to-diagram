@@ -10,7 +10,6 @@ import (
 	"google.golang.org/api/option"
 )
 
-// analyzeWithGemini sends the rendered diagram to Gemini for analysis
 func AnalyzeWithGemini(imagePath string) {
 	ctx := context.Background()
 	// Access your API key as an environment variable (see "Set up your API key" above)
