@@ -4,6 +4,7 @@ go 1.22.5
 
 require (
 	github.com/google/generative-ai-go v0.17.0
+	github.com/h2non/bimg v1.1.9
 	github.com/joho/godotenv v1.5.1
 	google.golang.org/api v0.189.0
 	gopkg.in/yaml.v3 v3.0.1

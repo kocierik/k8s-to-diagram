@@ -4,7 +4,28 @@ import (
 	"fmt"
 	"os/exec"
 	"strings"
+
+	"github.com/h2non/bimg"
 )
+
+func ConvertByteToSvg(svgBytes []byte) ([]byte, error) {
+	bimg.VipsCacheSetMax(0)
+	bimg.VipsCacheSetMaxMem(0)
+
+	// Converti l'SVG in PNG
+	image := bimg.NewImage(svgBytes)
+	pngData, err := image.Convert(bimg.PNG)
+	if err != nil {
+		return nil, fmt.Errorf("could not convert SVG to PNG: %v", err)
+	}
+	return pngData, nil
+
+	// err = bimg.Write("output.png", pngData)
+	// if err != nil {
+	//     fmt.Errorf(err)
+	// }
+
+}
 
 // ConvertSVGToPNG takes an input SVG file path and converts it to a PNG file.
 // It returns the path of the generated PNG file.
