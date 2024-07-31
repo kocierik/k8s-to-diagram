@@ -29,7 +29,7 @@ This program reads Kubernetes YAML manifests and generates a visual diagram of t
 2. **Build the application:**
 
     ```bash
-    go build -o k8s-mermaid
+    go build -o k8s-diagram
     ```
 
 ## Configuration
