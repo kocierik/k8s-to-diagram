@@ -31,6 +31,18 @@ This program reads Kubernetes YAML manifests and generates a visual diagram of t
     ```bash
     go build -o k8s-diagram
     ```
+## Running with Docker
+
+You can also run the application using Docker, which makes it easier to manage dependencies and run the program in a consistent environment.
+
+1. **Build the Docker image:**
+```bash
+docker build -t diagram:1.0 .
+```
+2. **Run the Docker container:**
+```bash
+docker run -v ./manifests:/manifests -v ./images:/images diagram:1.0
+```
 
 ## Configuration
 
