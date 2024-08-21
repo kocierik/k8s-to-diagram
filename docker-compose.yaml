@@ -1,0 +1,7 @@
+services:
+  diagram:
+    image: diagram:1.0
+    volumes:
+      - ./manifests:/manifests  
+      - ./images:/images  
+
